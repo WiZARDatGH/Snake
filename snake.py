@@ -56,6 +56,20 @@ def move(unit, dx=0, dy=0):
 
     unit[0] = (x, y)
 
+def eat(unit):
+    global food
+
+    new_food = (
+        random.randrange(WIDTH),
+        random.randrange(HEIGHT)
+    )
+
+    if new_food in unit:
+        return eat(unit)
+
+    unit.append(unit[-1])
+    food = new_food
+
 try:
     while True:
         key = get_key()
@@ -90,43 +104,27 @@ try:
             move(snake, 1, 0)
 
             if snake[0] == food:
-                snake.append((food[0]-1, food[1]))
-                food = (
-                    random.randint(1, WIDTH),
-                    random.randint(1, HEIGHT)
-                )
+                eat(snake)
 
         elif direction == "-x":
             move(snake, -1, 0)
 
             if snake[0] == food:
-                snake.append((food[0]+1, food[1]))
-                food = (
-                    random.randint(1, WIDTH),
-                    random.randint(1, HEIGHT)
-                )
+                eat(snake)
 
         elif direction == "+y":
             move(snake, 0, 1)
 
             if snake[0] == food:
-                snake.append((food[0], food[1]-1))
-                food = (
-                    random.randint(1, WIDTH),
-                    random.randint(1, HEIGHT)
-                )
+                eat(snake)
 
         elif direction == "-y":
             move(snake, 0, -1)
 
             if snake[0] == food:
-                snake.append((food[0], food[1]+1))
-                food = (
-                    random.randint(1, WIDTH),
-                    random.randint(1, HEIGHT)
-                )
+                eat(snake)
 
-        time.sleep(0.5)
+        time.sleep(0.4)
 
 finally:
     termios.tcsetattr(
